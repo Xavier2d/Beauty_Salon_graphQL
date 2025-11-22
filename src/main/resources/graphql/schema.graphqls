@@ -1,0 +1,123 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+# ----------------------
+# Query
+# ----------------------
+type Query {
+  # Appointment Notes
+  findNoteById(idNote: Int): AppointmentNoteResponse
+
+  # Reviews
+  findReviewById(id: Int): ReviewResponse
+  findReviewsByClient(idClient: Int): [ReviewResponse]
+  findReviewsByService(idService: Int): [ReviewResponse]
+  findReviewsBySentiment(sentiment: String): [ReviewResponse]
+  findReviewsByRatingGte(rating: Int): [ReviewResponse]
+
+  # Stylists
+  findAllStylist: [StylistResponse]
+  findByIdStylist(idStylist: Int): StylistResponse
+
+  # Users
+  findAllUsers: [UserResponse]
+  # getAllUsers(page: Int!, pageSize: Int!): [UserResponse]
+  findUserById(id: Int!): UserResponse
+  findUsersByRole(role: String!): [UserResponse]
+  findUsersByUsername(username: String!): [UserResponse]
+}
+
+# ----------------------
+# Mutation
+# ----------------------
+type Mutation {
+  # Appointment Notes
+  createNote(req: AppointmentNoteRequest): AppointmentNoteResponse
+  updateNote(idNote: Int, req: AppointmentNoteRequest): AppointmentNoteResponse
+
+  # Reviews
+  createReview(req: ReviewRequest): ReviewResponse
+  updateReview(id: Int, req: ReviewRequest): ReviewResponse
+
+  # Stylists
+  createStylist(req: StylistRequest): StylistResponse
+  updateStylist(idStylist: Int, req: StylistRequest): StylistResponse
+
+  # Users
+  createUser(req: UserRequest): UserResponse
+  updateUser(id: Int!, req: UserRequest): UserResponse
+}
+
+# ----------------------
+# Types
+# ----------------------
+type AppointmentNoteResponse {
+  idNote: ID!
+  idAppointment: Int!
+  noteText: String!
+}
+
+type ReviewResponse {
+  id: ID!
+  idClient: Int!
+  clientName: String
+  idService: Int!
+  serviceName: String
+  rating: Int!
+  comment: String
+  sentiment: String
+  createdAt: String
+}
+
+type StylistResponse {
+  idStylist: ID!
+  firstName: String!
+  lastName: String!
+  specialty: String
+  workSchedule: String
+  available: Boolean
+}
+
+type UserResponse {
+  idUser: Int!
+  userName: String!
+  role: String!
+  idClient: Int
+  clientName: String
+  idStylist: Int
+  stylistName: String
+}
+
+# ----------------------
+# Inputs
+# ----------------------
+input AppointmentNoteRequest {
+  idAppointment: Int!
+  noteText: String!
+}
+
+input ReviewRequest {
+  idClient: Int!
+  idService: Int!
+  rating: Int!
+  comment: String
+  sentiment: String
+}
+
+input StylistRequest {
+  firstName: String!
+  lastName: String!
+  specialty: String
+  workSchedule: String
+  available: Boolean
+}
+
+input UserRequest {
+  username: String!
+  password: String!
+  role: String!
+  clientId: Int
+  stylistId: Int
+}
